@@ -1,6 +1,6 @@
 ---
 name: To Do List
-about: To Do List
+about: 프로젝트 진행에 필요한 To Do 리스트 템플릿입니다.
 title: ''
 labels: ''
 assignees: ''

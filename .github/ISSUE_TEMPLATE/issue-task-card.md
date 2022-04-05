@@ -1,6 +1,6 @@
 ---
 name: Issue Task Card
-about: Issue Task Card
+about: 태스크 카드 작성
 title: ''
 labels: ''
 assignees: ''
