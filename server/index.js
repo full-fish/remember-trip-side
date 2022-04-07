@@ -19,6 +19,10 @@ app.get("/", (req, res) => {
   return res.status(200).send("Hello World");
 });
 
+app.get("/user", (req, res) => {
+  return res.status(200).send({data: {username:"holy", age:26, email:"safjsdoi@gmail.com"}})
+});
+
 server = app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });
