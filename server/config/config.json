@@ -1,0 +1,38 @@
+{
+  "development": {
+    "username": "root",
+    "password": "sktkfka5",
+    "database": "remembertrip_development",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "timezone": "+09:00",
+    "dialectOptions": {
+      "dateStrings": true,
+      "typeCast": true
+    }
+  },
+  "test": {
+    "username": "root",
+    "password": "sktkfka5",
+    "database": "remembertrip_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "timezone": "+09:00",
+    "dialectOptions": {
+      "dateStrings": true,
+      "typeCast": true
+    }
+  },
+  "production": {
+    "username": "root",
+    "password": "sktkfka5",
+    "database": "remembertrip_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "timezone": "+09:00",
+    "dialectOptions": {
+      "dateStrings": true,
+      "typeCast": true
+    }
+  }
+}
