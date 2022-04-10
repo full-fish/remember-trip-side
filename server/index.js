@@ -4,7 +4,6 @@ const cookieParser = require("cookie-parser");
 const express = require("express");
 const app = express();
 const port = 8080;
-// const router = require("./routes/links");
 const user = require("./routes/user");
 const account = require("./routes/account");
 const mypage = require("./routes/mypage");
