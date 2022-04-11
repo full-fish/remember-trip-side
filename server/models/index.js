@@ -30,9 +30,21 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
-db.user.hasMany(db.trip, { foreignKey: "user_id", sourceKey: "id" });
-db.trip.belongsTo(db.user, { foreignKey: "user_id", targetKey: "id" });
+db.user.hasMany(db.trip, { foreignKey: "user_id", sourceKey: "trip_id" });
+db.trip.belongsTo(db.user, { foreignKey: "user_id", targetKey: "user_id" });
 
+// db.diary.belongsToMany(db.hashtag, {
+//   through: "diary-hashtah",
+//   foreignKey: "hashtag_id",
+//   targetKey: "id",
+// });
+// db.hashtag.belongsToMany(db.diary, {
+//   through: "diary-hashtah",
+//   foreignKey: "diary_id",
+//   targetKey: "id",
+// });
+//123213213213
+//1231313
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
