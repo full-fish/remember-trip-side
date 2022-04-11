@@ -7,7 +7,9 @@ const port = 8080;
 const user = require("./routes/user");
 const account = require("./routes/account");
 const mypage = require("./routes/mypage");
-const trip = require("./routes/trip");
+// const trip = require("./routes/trip");
+const diary = require("./routes/diary");
+// const hashtag = require("./routes/hashtag");
 
 app.use(express.json());
 app.use(
@@ -22,7 +24,9 @@ app.use(cookieParser());
 app.use("/", user);
 app.use("/account", account);
 app.use("/mypage", mypage);
-app.use("/trip", trip);
+// app.use("/trip", trip);
+app.use("/diary", diary);
+// app.use("/hashtag", hashtag);
 
 server = app.listen(port, () => {
   console.log(`Listening on ${port}`);

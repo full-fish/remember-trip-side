@@ -1,9 +1,9 @@
 const { trip } = require("../../models");
-const user = require("../user");
-
+const accessTokenVerify = require("../tokenHandler/accessTokenVerify");
 module.exports = {
   get: async (req, res) => {
     try {
+      accessTokenVerify();
       const data = await trip.findAll();
       res.status(200).json(data);
     } catch (err) {

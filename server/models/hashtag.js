@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   hashtag.init(
     {
-      conenct: DataTypes.STRING,
+      hashtags: DataTypes.STRING,
     },
     {
       sequelize,

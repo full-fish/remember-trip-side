@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   trip.init(
     {
+      // user_id: DataTypes.INTEGER,
       county: DataTypes.STRING,
       start_date: DataTypes.DATE,
       end_date: DataTypes.DATE,
