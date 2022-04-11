@@ -30,6 +30,9 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
+db.user.hasMany(db.trip, { foreignKey: "user_id", sourceKey: "id" });
+db.trip.belongsTo(db.user, { foreignKey: "user_id", targetKey: "id" });
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

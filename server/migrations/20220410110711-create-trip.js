@@ -2,18 +2,17 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("trip", {
+      //유저  트립   유저
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      user_id: {
-        type: Sequelize.INTEGER,
-      },
       county: {
         type: Sequelize.STRING,
       },
+
       start_date: {
         type: Sequelize.DATE,
       },

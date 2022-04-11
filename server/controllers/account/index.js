@@ -1,5 +1,5 @@
 const { account } = require("../../models");
-const user = require("../user");
+// const user = require("../user");
 
 module.exports = {
   get: async (req, res) => {
