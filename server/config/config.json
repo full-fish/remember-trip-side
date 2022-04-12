@@ -3,8 +3,7 @@
     "username": "admin",
     "password": "sktkfka5",
     "database": "remembertrip_development",
-    "host": "remember-trip-side.coe5erwjzpjy.ap-northeast-2.rds.amazonaws.com",
-    "port": 13306,
+    "host": "127.0.0.1",
     "dialect": "mysql",
     "timezone": "+09:00",
     "dialectOptions": {
@@ -30,8 +29,8 @@
     "username": "admin",
     "password": "sktkfka5",
     "database": "remembertrip_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql",
+    "host": "remember-trip-side.coe5erwjzpjy.ap-northeast-2.rds.amazonaws.com",
+    "port": 13306,
     "timezone": "+09:00",
     "dialectOptions": {
       "charset": "utf8mb4",
