@@ -20,7 +20,6 @@ app.use(
   })
 );
 app.use(cookieParser());
-
 app.use("/", user);
 app.use("/account", account);
 app.use("/mypage", mypage);
