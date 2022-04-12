@@ -12,17 +12,19 @@ module.exports = {
         if (!user_id || !password) {
           res.status(422).send("insufficient parameters supplied");
         }
-
         const userInfo = await user.findOne({
           where: {
             user_id: req.body.user_id,
             password: req.body.password,
           },
         });
+
         //이미 가입되었을 경우
+
         if (userInfo) {
           res.status(400).send({ data: null, message: "email already exists" });
         }
+
         //가입이 되지 않았을 경우
         else {
           const payload = {
@@ -32,11 +34,12 @@ module.exports = {
             },
             message: "signup ok",
           };
-          res.status(201).send(payload);
+          
           await user.create(payload.userInfo);
+res.status(201).send(payload);
         }
       } catch (err) {
-        res.status(500).send("Server Error Code 500");
+        res.status(500).send("Server Error Code 500/ in singup");
       }
     },
   },
