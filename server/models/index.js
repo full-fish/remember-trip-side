@@ -7,12 +7,19 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.json")[env];
 const db = {};
-
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(config.database, config.username, config.password, {
+    host: "remember-trip-side.coe5erwjzpjy.ap-northeast-2.rds.amazonaws.com",
+    port: 13306,
+    logging: console.log,
+    dialect: "mysql",
+    ssl: "Amazon RDS",
+    pool: { maxConnections: 5, maxIdleTime: 30 },
+    language: "en",
+  });
 }
 
 fs.readdirSync(__dirname)
