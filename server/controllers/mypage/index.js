@@ -1,13 +1,35 @@
 const { user } = require("../../models");
-
+const tokenHandler = require("../tokenHandler");
 module.exports = {
   get: async (req, res) => {
     try {
-      const data = await user.findAll();
-      console.log(data);
-      res.status(200).json(data);
+      const validity = tokenHandler.accessTokenVerify(req);
+      if (validity) {
+        const data = await user.findAll();
+        console.log(data);
+        res.status(200).json(data);
+      }
     } catch (err) {
-      res.status(500).send("Server Error Code 5001");
+      res.status(500).send("Server Error Code 500");
+    }
+  },
+  patch: async (req, res) => {
+    //patch 하나만 바꾸는거고 put은 모든거 지정(지정안한거 null됨)
+    try {
+      const validity = tokenHandler.accessTokenVerify(req);
+      if (validity) {
+        const userInfo = await user.findOne({
+          where: {
+            user_id: req.body.user_id,
+            password: req.body.password,
+          },
+        });
+
+        await user.update({ password: req.body.newPassword }, { where: { id: userInfo.id } });
+        res.status(200).json("ok");
+      }
+    } catch (err) {
+      res.status(500).send("Server Error Code 500");
     }
   },
 };

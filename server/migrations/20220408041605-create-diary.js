@@ -8,9 +8,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      trip_id: {
-        type: Sequelize.INTEGER,
-      },
+      // trip_id: {
+      //   type: Sequelize.INTEGER,
+      // },
       county: {
         type: Sequelize.STRING,
       },

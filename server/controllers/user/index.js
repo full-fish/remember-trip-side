@@ -1,21 +1,21 @@
 const { user } = require("../../models");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const test = require("./test");
+const tokenHandler = require("../tokenHandler");
 
 module.exports = {
   signup: {
     post: async (req, res) => {
       try {
         // 정보 불충분
-        const { name, email, password } = req.body;
-        if (!name || !email || !password) {
+        const { user_id, password } = req.body;
+        if (!user_id || !password) {
           res.status(422).send("insufficient parameters supplied");
         }
 
         const userInfo = await user.findOne({
           where: {
-            email: req.body.email,
+            user_id: req.body.user_id,
             password: req.body.password,
           },
         });
@@ -27,9 +27,8 @@ module.exports = {
         else {
           const payload = {
             userInfo: {
-              name: name,
-              email: email,
-              password: password,
+              user_id: req.body.user_id,
+              password: req.body.password,
             },
             message: "signup ok",
           };
@@ -47,7 +46,7 @@ module.exports = {
       try {
         const userInfo = await user.findOne({
           where: {
-            email: req.body.email,
+            user_id: req.body.user_id,
             password: req.body.password,
           },
         });
@@ -60,8 +59,7 @@ module.exports = {
         else {
           const payload = {
             id: userInfo.id,
-            name: userInfo.name,
-            email: userInfo.email,
+            user_id: userInfo.user_id,
             password: userInfo.password,
           };
 
@@ -83,7 +81,7 @@ module.exports = {
 
           res.status(200).send({
             data: { accessToken: accessToken },
-            message: `${req.body.name}님 로그인을 환영합니다.`,
+            message: `${req.body.user_id}님 로그인을 환영합니다.`,
           });
         }
       } catch (err) {
@@ -94,22 +92,24 @@ module.exports = {
   logout: {
     post: async (req, res) => {
       try {
-        //토큰 없애기위해  클라이언트에서 로그아웃버튼누를때 없애면됨
-        //const accessToken = jwt.sign(payload, 1, { expiresIn: "1s" });
-      } catch (err) {}
+        res.status(200).send("logout");
+      } catch (err) {
+        res.status(500).send("Server Error Code 500");
+      }
     },
   },
   withdrawal: {
     delete: async (req, res) => {
       try {
-        const { name, email, password } = req.body;
-        if (!name || !email || !password) {
-        }
+        const validity = tokenHandler.accessTokenVerify(req);
+        if (validity) {
+          const { user_id, password } = req.body;
 
-        res.status(200).json("Account Deleted");
-        await user.destroy({
-          where: { id: req.params.userId },
-        });
+          await user.destroy({
+            where: { user_id: user_id, password: password },
+          });
+          res.status(200).json("Account Deleted");
+        }
       } catch (err) {
         res.status(500).send("Server Error Code 500");
       }

@@ -12,7 +12,7 @@ module.exports = {
         key: "id", // 그 아이디 값을 참고합니다.
       },
       onUpdate: "CASCADE",
-      onDelete: "SET NULL",
+      onDelete: "CASCADE",
     });
     await queryInterface.addColumn("diary_hashtag", "hashtag_id", {
       type: Sequelize.INTEGER,
@@ -22,7 +22,7 @@ module.exports = {
         key: "id", // 그 아이디 값을 참고합니다.
       },
       onUpdate: "CASCADE",
-      onDelete: "SET NULL",
+      onDelete: "CASCADE",
     });
     // 🎈 클래스 테이블에 regionId 필드를 생성합니다.
   },
