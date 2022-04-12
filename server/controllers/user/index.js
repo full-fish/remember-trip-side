@@ -1,37 +1,89 @@
 const { user } = require("../../models");
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const tokenHandler = require("../tokenHandler");
 
 module.exports = {
-  mypage: {
-    get: async (req, res) => {
-      try {
-        const data = await user.findAll();
-        res.status(200).json(data);
-      } catch (err) {
-        res.status(500).send("Server Error Code 500");
-      }
-    },
-  },
   signup: {
     post: async (req, res) => {
       try {
-        const { name, email, password } = req.body;
-        const payload = {
-          name: name,
-          email: email,
-          password: password,
-        };
-        res.status(201).send(payload);
-        await user.create(payload);
+        // 정보 불충분
+        const { user_id, password } = req.body;
+        if (!user_id || !password) {
+          res.status(422).send("insufficient parameters supplied");
+        }
+
+        const userInfo = await user.findOne({
+          where: {
+            user_id: req.body.user_id,
+            password: req.body.password,
+          },
+        });
+        //이미 가입되었을 경우
+        if (userInfo) {
+          res.status(400).send({ data: null, message: "email already exists" });
+        }
+        //가입이 되지 않았을 경우
+        else {
+          const payload = {
+            userInfo: {
+              user_id: req.body.user_id,
+              password: req.body.password,
+            },
+            message: "signup ok",
+          };
+          res.status(201).send(payload);
+          await user.create(payload.userInfo);
+        }
       } catch (err) {
         res.status(500).send("Server Error Code 500");
       }
     },
   },
+
   login: {
     post: async (req, res) => {
       try {
-        const data = await user.findAll();
-        res.status(200).json(data);
+        const userInfo = await user.findOne({
+          where: {
+            user_id: req.body.user_id,
+            password: req.body.password,
+          },
+        });
+
+        //데이터베이스에 회원정보가 없을 경우
+        if (!userInfo) {
+          res.status(400).send({ data: null, message: "Wrong email or password" });
+        }
+        //데이터 베이스에 회원정보가 있을 경우
+        else {
+          const payload = {
+            id: userInfo.id,
+            user_id: userInfo.user_id,
+            password: userInfo.password,
+          };
+
+          //! 테스트
+          // console.log("11111");
+          // console.log(test.abc24);
+          // test.sayHelloInEnglish();
+          // console.log("222222");
+          //!
+          // console.log(process.env.ACCESS_SECRET);
+          const accessToken = jwt.sign(payload, process.env.ACCESS_SECRET, { expiresIn: "1h" });
+          const refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, { expiresIn: "1d" });
+
+          res.cookie("refreshToken", refreshToken, {
+            sameSite: "none",
+            httpOnly: true,
+            secure: true,
+          });
+
+          res.status(200).send({
+            data: { accessToken: accessToken },
+            message: `${req.body.user_id}님 로그인을 환영합니다.`,
+          });
+        }
       } catch (err) {
         res.status(500).send("Server Error Code 500");
       }
@@ -40,8 +92,7 @@ module.exports = {
   logout: {
     post: async (req, res) => {
       try {
-        const data = await user.findAll();
-        res.status(200).json(data);
+        res.status(200).send("logout");
       } catch (err) {
         res.status(500).send("Server Error Code 500");
       }
@@ -50,8 +101,15 @@ module.exports = {
   withdrawal: {
     delete: async (req, res) => {
       try {
-        const data = await user.findAll();
-        res.status(200).json(data);
+        const validity = tokenHandler.accessTokenVerify(req);
+        if (validity) {
+          const { user_id, password } = req.body;
+
+          await user.destroy({
+            where: { user_id: user_id, password: password },
+          });
+          res.status(200).json("Account Deleted");
+        }
       } catch (err) {
         res.status(500).send("Server Error Code 500");
       }

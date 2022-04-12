@@ -9,18 +9,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // models.user.hasMany(models.trip, { foreignKey: "user_id" });
+      // this.hasMany(models.trip);
     }
   }
   user.init(
     {
-      name: DataTypes.STRING,
-      email: DataTypes.STRING,
+      user_id: DataTypes.STRING,
       password: DataTypes.STRING,
     },
     {
       sequelize,
       modelName: "user",
       freezeTableName: true,
+      timestamps: true, //기본이 true
     }
   );
   return user;

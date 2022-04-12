@@ -11,9 +11,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      trip_id: {
-        type: Sequelize.INTEGER,
-      },
+      // trip_id: {
+      //   type: Sequelize.INTEGER,
+      // },
       category: {
         type: Sequelize.STRING,
       },

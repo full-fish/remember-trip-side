@@ -1,12 +1,12 @@
-const { account } = require("../../models");
+const { trip } = require("../../models");
 const tokenHandler = require("../tokenHandler");
-
 module.exports = {
   get: async (req, res) => {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        const data = await account.findAll();
+        //   const userData = accessTokenVerify(accessToken);
+        const data = await trip.findAll();
         res.status(200).json(data);
       }
     } catch (err) {
@@ -18,30 +18,15 @@ module.exports = {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        const {
-          trip_id,
-          category,
-          item_name,
-          price,
-          paid_person,
-          currency,
-          pictuer,
-          gps,
-          write_date,
-        } = req.body;
+        const { user_id, county, start_date, end_date } = req.body;
         const payload = {
-          trip_id: trip_id,
-          category: category,
-          item_name: item_name,
-          price: price,
-          paid_person: paid_person,
-          currency: currency,
-          pictuer: pictuer,
-          gps: gps,
-          write_date: write_date,
+          user_id: user_id,
+          county: county,
+          start_date: start_date,
+          end_date: end_date,
         };
-        await account.create(payload);
         res.status(201).send(payload);
+        await trip.create(payload);
       }
     } catch (err) {
       res.status(500).send("Server Error Code 500");
@@ -52,13 +37,15 @@ module.exports = {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
         const { id } = req.body;
-        await account.destroy({
+
+        res.status(200).json("trip Deleted");
+        await trip.destroy({
           where: { id: id },
         });
-        res.status(200).json("Account Deleted");
       }
     } catch (err) {
       res.status(500).send("Server Error Code 500");
     }
   },
 };
+//트립 삭제
