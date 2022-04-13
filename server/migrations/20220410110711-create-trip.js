@@ -15,7 +15,9 @@ module.exports = {
       county: {
         type: Sequelize.STRING,
       },
-
+      totalPrice: {
+        type: Sequelize.INTEGER,
+      },
       start_date: {
         type: Sequelize.DATE,
       },

@@ -6,7 +6,7 @@ module.exports = {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        const data = await diary.findAll();
+        const data = await diary.findAll({ where: { trip_id: req.params.trip_id } });
         res.status(200).json(data);
       }
     } catch (err) {
@@ -18,18 +18,14 @@ module.exports = {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        const { trip_id, county, location, content, write_date, hashtags } = req.body;
+        const { location, content, write_date, hashtags } = req.body;
         //해쉬태그 제외한 다이어리 추가
         const diaryPayload = {
-          trip_id: trip_id,
-          county: county,
+          trip_id: req.params.trip_id,
           location: location,
           content: content,
           write_date: write_date,
         };
-
-        //   const data2 = await hashtag.findAll();
-        //   console.log(data2);
 
         const diaryInfo = await diary.create(diaryPayload);
 
@@ -57,7 +53,7 @@ module.exports = {
           };
           await diary_hashtag.create(diary_hashtagPayload);
         });
-        res.status(201).send("ok");
+        res.status(201).send({ id: diaryInfo.id, message: "Successfully Account Post" });
       }
     } catch (err) {
       res.status(500).send("Server Error Code 500");
@@ -67,12 +63,26 @@ module.exports = {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        const { id } = req.body;
-
-        res.status(200).json("Diary Deleted");
+        const id = req.params.diary_id;
         await diary.destroy({
           where: { id: id },
         });
+        res.status(200).json("Successfully Diary Deleted");
+      }
+    } catch (err) {
+      res.status(500).send("Server Error Code 500");
+    }
+  },
+  patch: async (req, res) => {
+    //patch 하나만 바꾸는거고 put은 모든거 지정(지정안한거 null됨)
+    try {
+      const validity = tokenHandler.accessTokenVerify(req);
+      if (validity) {
+        await diary.update(
+          { content: req.body.newContent },
+          { where: { id: req.params.diary_id } }
+        );
+        res.status(200).json("Successfully Diary Deleted");
       }
     } catch (err) {
       res.status(500).send("Server Error Code 500");

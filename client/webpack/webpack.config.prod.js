@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -10,13 +10,17 @@ module.exports = {
     filename: 'index_bundle.js',
   },
   module: {
-    rules: [{
-      test: /\.jsx?$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader',
-    }]
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+      },
+    ],
   },
-  plugins: [new HtmlWebpackPlugin({
-    template: 'public/index.html',
-  })],
-}
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'public/index.html',
+    }),
+  ],
+};

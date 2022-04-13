@@ -29,7 +29,6 @@ module.exports = {
           type: Sequelize.DATE,
         },
       }
-
       // {  이것들 되는지 확인하기  모델에 쓰는걸수도  잘 모름
       //   sequelize,
       //   timestamps: true, // createdAt, udaptedAt 자동 생성
