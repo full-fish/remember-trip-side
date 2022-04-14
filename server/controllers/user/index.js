@@ -32,11 +32,11 @@ module.exports = {
               user_id: req.body.user_id,
               password: req.body.password,
             },
-            message: "signup ok",
+            message: "Successfully Sign Up",
           };
-          
+
           await user.create(payload.userInfo);
-res.status(201).send(payload);
+          res.status(201).send(payload);
         }
       } catch (err) {
         res.status(500).send("Server Error Code 500/ in singup");
@@ -44,7 +44,7 @@ res.status(201).send(payload);
     },
   },
 
-  login: {
+  signin: {
     post: async (req, res) => {
       try {
         const userInfo = await user.findOne({
@@ -66,15 +66,8 @@ res.status(201).send(payload);
             password: userInfo.password,
           };
 
-          //! 테스트
-          // console.log("11111");
-          // console.log(test.abc24);
-          // test.sayHelloInEnglish();
-          // console.log("222222");
-          //!
-          // console.log(process.env.ACCESS_SECRET);
-          const accessToken = jwt.sign(payload, process.env.ACCESS_SECRET, { expiresIn: "1h" });
-          const refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, { expiresIn: "1d" });
+          const accessToken = jwt.sign(payload, process.env.ACCESS_SECRET, { expiresIn: "1d" });
+          const refreshToken = jwt.sign(payload, process.env.REFRESH_SECRET, { expiresIn: "7d" });
 
           res.cookie("refreshToken", refreshToken, {
             sameSite: "none",
@@ -92,10 +85,13 @@ res.status(201).send(payload);
       }
     },
   },
-  logout: {
+  signout: {
     post: async (req, res) => {
       try {
-        res.status(200).send("logout");
+        const validity = tokenHandler.accessTokenVerify(req);
+        if (validity) {
+          res.status(200).send("Successfully Sign Out");
+        }
       } catch (err) {
         res.status(500).send("Server Error Code 500");
       }
@@ -106,12 +102,10 @@ res.status(201).send(payload);
       try {
         const validity = tokenHandler.accessTokenVerify(req);
         if (validity) {
-          const { user_id, password } = req.body;
-
           await user.destroy({
-            where: { user_id: user_id, password: password },
+            where: { id: validity.id },
           });
-          res.status(200).json("Account Deleted");
+          res.status(200).json("Successfully User Deleted");
         }
       } catch (err) {
         res.status(500).send("Server Error Code 500");

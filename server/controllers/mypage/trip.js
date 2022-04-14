@@ -1,32 +1,57 @@
 const { trip } = require("../../models");
 const tokenHandler = require("../tokenHandler");
 module.exports = {
+  // get: async (req, res) => {
+  //   try {
+  //     const validity = tokenHandler.accessTokenVerify(req);
+  //     if (validity) {
+  //       console.log("111");
+  //       console.log(validity);
+  //       let data = await diary.findAll();
+  //       console.log("222");
+  //       res.status(200).json(data);
+  //     }
+  //   } catch (err) {
+  //     res.status(500).send("Server Error Code 5010");
+  //   }
+  // },
+  // get: async (req, res) => {
+  //   try {
+  //     const validity = tokenHandler.accessTokenVerify(req);
+  //     if (validity) {
+  //       const data = await trip.findAll();
+  //       res.status(200).json(data);
+  //     }
+  //   } catch (err) {
+  //     res.status(500).send("Server Error Code 500");
+  //   }
+  // },
   get: async (req, res) => {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        //   const userData = accessTokenVerify(accessToken);
-        const data = await trip.findAll();
-        res.status(200).json(data);
+        const trips = await trip.findAll();
+        res.status(200).json(trips);
       }
     } catch (err) {
       res.status(500).send("Server Error Code 500");
     }
   },
-
   post: async (req, res) => {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        const { user_id, county, start_date, end_date } = req.body;
+        const { country, totalPrice, start_date, end_date } = req.body;
         const payload = {
-          user_id: user_id,
-          county: county,
+          user_id: validity.id,
+          country: country,
+          totalPrice: totalPrice,
           start_date: start_date,
           end_date: end_date,
         };
-        res.status(201).send(payload);
-        await trip.create(payload);
+
+        const result = await trip.create(payload);
+        res.status(201).send({ id: result.id, message: "Successfully Trip Post" });
       }
     } catch (err) {
       res.status(500).send("Server Error Code 500");
@@ -36,11 +61,9 @@ module.exports = {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        const { id } = req.body;
-
-        res.status(200).json("trip Deleted");
+        res.status(200).json("Successfully Trip Deleted");
         await trip.destroy({
-          where: { id: id },
+          where: { id: req.params.trip_id },
         });
       }
     } catch (err) {

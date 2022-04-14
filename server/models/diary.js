@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
   diary.init(
     {
       // trip_id: DataTypes.INTEGER,
-      county: DataTypes.STRING,
       location: DataTypes.STRING,
       content: DataTypes.STRING,
       write_date: DataTypes.DATE,

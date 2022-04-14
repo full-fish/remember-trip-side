@@ -5,12 +5,8 @@ const path = require("path");
 const Sequelize = require("sequelize");
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
-
 const config = require(__dirname + "/../config/config.js")[env];
-//config 로컬  config2 rds
-console.log("---------------------------");
-console.log(config);
-console.log("----------------------------");
+
 const db = {};
 let sequelize;
 if (config.use_env_variable) {
@@ -41,14 +37,14 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
-db.user.hasMany(db.trip, { foreignKey: "user_id", sourceKey: "id", onDelete: "cascade" });
-db.trip.belongsTo(db.user, { foreignKey: "user_id", targetKey: "id", onDelete: "cascade" });
+db.user.hasMany(db.trip, { foreignKey: "user_id", sourceKey: "id" });
+db.trip.belongsTo(db.user, { foreignKey: "user_id", targetKey: "id" });
 
-db.trip.hasMany(db.account, { foreignKey: "trip_id", sourceKey: "id", onDelete: "cascade" });
-db.account.belongsTo(db.trip, { foreignKey: "trip_id", targetKey: "id", onDelete: "cascade" });
+db.trip.hasMany(db.account, { foreignKey: "trip_id", sourceKey: "id" });
+db.account.belongsTo(db.trip, { foreignKey: "trip_id", targetKey: "id" });
 
-db.trip.hasMany(db.diary, { foreignKey: "trip_id", sourceKey: "id", onDelete: "cascade" });
-db.diary.belongsTo(db.trip, { foreignKey: "trip_id", targetKey: "id", onDelete: "cascade" });
+db.trip.hasMany(db.diary, { foreignKey: "trip_id", sourceKey: "id" });
+db.diary.belongsTo(db.trip, { foreignKey: "trip_id", targetKey: "id" });
 
 db.diary.belongsToMany(db.hashtag, {
   through: "diary-hashtag",

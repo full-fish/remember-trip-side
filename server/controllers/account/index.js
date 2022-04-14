@@ -6,7 +6,7 @@ module.exports = {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        const data = await account.findAll();
+        const data = await account.findAll({ where: { trip_id: req.params.trip_id } });
         res.status(200).json(data);
       }
     } catch (err) {
@@ -18,19 +18,10 @@ module.exports = {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        const {
-          trip_id,
-          category,
-          item_name,
-          price,
-          paid_person,
-          currency,
-          pictuer,
-          gps,
-          write_date,
-        } = req.body;
+        const { category, item_name, price, paid_person, currency, pictuer, gps, write_date } =
+          req.body;
         const payload = {
-          trip_id: trip_id,
+          trip_id: req.params.trip_id,
           category: category,
           item_name: item_name,
           price: price,
@@ -40,8 +31,8 @@ module.exports = {
           gps: gps,
           write_date: write_date,
         };
-        await account.create(payload);
-        res.status(201).send(payload);
+        const result = await account.create(payload);
+        res.status(201).send({ id: result.id, message: "Successfully Account Post" });
       }
     } catch (err) {
       res.status(500).send("Server Error Code 500");
@@ -51,11 +42,25 @@ module.exports = {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        const { id } = req.body;
         await account.destroy({
-          where: { id: id },
+          where: { id: req.params.account_id },
         });
-        res.status(200).json("Account Deleted");
+        res.status(200).json("Successfully Account Deleted");
+      }
+    } catch (err) {
+      res.status(500).send("Server Error Code 500");
+    }
+  },
+  patch: async (req, res) => {
+    //patch 하나만 바꾸는거고 put은 모든거 지정(지정안한거 null됨)
+    try {
+      const validity = tokenHandler.accessTokenVerify(req);
+      if (validity) {
+        await account.update(
+          { price: req.body.newPrice },
+          { where: { id: req.params.account_id } }
+        );
+        res.status(200).json("Successfully Account Patch");
       }
     } catch (err) {
       res.status(500).send("Server Error Code 500");
