@@ -23,15 +23,6 @@ function MyPage() {
   const [newModalIsOpen, setNewIsOpen] = useState(false);
   const context = useContext(stateContext);
   const navigate = useNavigate();
-  let list = [
-    {
-      country: 'KR',
-      start_date: '2022-01-01',
-      end_date: '2022-01-03',
-      id: 1,
-      totalPrice: 100000,
-    },
-  ];
   let subtitle;
 
   function openModal() {
@@ -85,8 +76,8 @@ function MyPage() {
               key={el.id}
               country={el.country}
               totalCost={el.totalPrice}
-              start={el.start_date}
-              end={el.end_date}
+              start_date={el.start_date}
+              end_date={el.end_date}
             />
           ))
         : 'Not LogIn'}

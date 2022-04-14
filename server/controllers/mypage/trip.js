@@ -30,11 +30,8 @@ module.exports = {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        console.log("11");
-        console.log(req.params);
-        const data = await trip.findAll();
-        console.log("22");
-        res.status(200).json(data);
+        const trips = await trip.findAll();
+        res.status(200).json(trips);
       }
     } catch (err) {
       res.status(500).send("Server Error Code 500");
@@ -44,10 +41,10 @@ module.exports = {
     try {
       const validity = tokenHandler.accessTokenVerify(req);
       if (validity) {
-        const { county, totalPrice, start_date, end_date } = req.body;
+        const { country, totalPrice, start_date, end_date } = req.body;
         const payload = {
           user_id: validity.id,
-          county: county,
+          country: country,
           totalPrice: totalPrice,
           start_date: start_date,
           end_date: end_date,

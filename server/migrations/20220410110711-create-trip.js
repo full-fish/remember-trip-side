@@ -12,7 +12,7 @@ module.exports = {
       // user_id: {
       //   type: Sequelize.INTEGER,
       // },
-      county: {
+      country: {
         type: Sequelize.STRING,
       },
       totalPrice: {

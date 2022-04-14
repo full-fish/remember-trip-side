@@ -48,13 +48,16 @@ function Account() {
 
   const getData = () => {
     axios
-      .get(`http://localhost:8080/trip/${1}/account`, {
-        headers: {
-          authorization: `Bearer ${context.state.accessToken}`,
-          'Content-Type': 'application/json',
+      .get(
+        `http://localhost:8080/trip/${context.state.tripList[0].id}/account`,
+        {
+          headers: {
+            authorization: `Bearer ${context.state.accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          params: { trip_id: 1 },
         },
-        params: { trip_id: 1 },
-      })
+      )
       .then(data => {
         const initData = data.data.accounts;
 
@@ -100,7 +103,7 @@ function Account() {
 
       axios
         .post(
-          `http://localhost:8080/trip/${1}/account`,
+          `http://localhost:8080/trip/${context.state.tripList[0].id}/account`,
           {
             item_name,
             category,
@@ -138,15 +141,18 @@ function Account() {
   const onRemove = targetId => {
     dispatch({ type: 'REMOVE', targetId });
 
-    axios.delete(`http://localhost:8080/trip/${1}/account/${targetId}`, {
-      headers: {
-        authorization: `Bearer ${context.state.accessToken}`,
-        'Content-Type': 'application/json',
+    axios.delete(
+      `http://localhost:8080/trip/${context.state.tripList[0].id}/account/${targetId}`,
+      {
+        headers: {
+          authorization: `Bearer ${context.state.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        data: {
+          account_id: targetId,
+        },
       },
-      data: {
-        account_id: targetId,
-      },
-    });
+    );
     const newAccountList = data.filter(it => it.id !== targetId);
     accountSetData(newAccountList);
   };

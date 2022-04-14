@@ -50,6 +50,8 @@ function Home() {
         </Link>
         {context.state.isLogIn ? (
           <>
+            {context.funcs.getTrip()}
+            {console.log(context.state.tripList)}
             <span onClick={openModal}>시작하기</span>
             <Modal
               isOpen={modalIsOpen}

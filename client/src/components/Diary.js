@@ -48,7 +48,7 @@ function Diary() {
 
   const getData = () => {
     axios
-      .get(`http://localhost:8080/trip/${1}/diary`, {
+      .get(`http://localhost:8080/trip/${context.state.tripList[0].id}/diary`, {
         headers: {
           authorization: `Bearer ${context.state.accessToken}`,
           'Content-Type': 'application/json',
@@ -91,14 +91,13 @@ function Diary() {
         newDate.getSeconds();
       axios
         .post(
-          `http://localhost:8080/trip/${1}/diary`,
+          `http://localhost:8080/trip/${context.state.tripList[0].id}/diary`,
           { location, content, write_date: nowTime, trip_id: 1 },
           {
             headers: {
               authorization: `Bearer ${context.state.accessToken}`,
               'Content-Type': 'application/json',
             },
-            withCredentials: true,
           },
         )
         .then(data => {
@@ -119,15 +118,18 @@ function Diary() {
 
   const onRemove = targetId => {
     axios
-      .delete(`http://localhost:8080/trip/${1}/diary/${targetId}`, {
-        headers: {
-          authorization: `Bearer ${context.state.accessToken}`,
-          'Content-Type': 'application/json',
+      .delete(
+        `http://localhost:8080/trip/${context.state.tripList[0].id}/diary/${targetId}`,
+        {
+          headers: {
+            authorization: `Bearer ${context.state.accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          data: {
+            diary_id: targetId,
+          },
         },
-        data: {
-          diary_id: targetId,
-        },
-      })
+      )
       .then(res => {
         console.log(res);
         dispatch({ type: 'REMOVE', targetId });

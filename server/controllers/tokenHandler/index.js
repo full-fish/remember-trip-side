@@ -1,10 +1,8 @@
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 module.exports = {
   accessTokenVerify: (req) => {
     const authorization = req.headers.authorization;
-    console.log(authorization);
     if (!authorization) {
       res.status(400).send({ data: null, message: "invalid access token" });
     } else {

@@ -55,6 +55,10 @@ function Store({ children }) {
     setEndDate(moment(data).format('YYYY/MM/DD'));
   };
 
+  const updateTripList = date => {
+    setTripList(date);
+  };
+
   const startTrip = () => {
     axios
       .post(
@@ -72,9 +76,8 @@ function Store({ children }) {
       });
   };
 
-  const getTrip = async () => {
-    console.log('hi');
-    await axios({
+  const getTrip = () => {
+    axios({
       url: 'http://localhost:8080/mypage/trip',
       method: 'get',
       headers: {
@@ -82,20 +85,31 @@ function Store({ children }) {
         'Content-Type': 'application/json',
       },
     }).then(data => {
-      setTripList(data.data.tripList);
-      return;
+      if (tripList.length === 0) {
+        setTripList(data.data);
+        return;
+      }
+
+      const newTrips = data.data;
+
+      if (tripList.length !== newTrips.length) {
+        setTripList(newTrips);
+      }
+      for (const trip of tripList) {
+        let isSame = false;
+        for (const newTrip of newTrips) {
+          if (trip.id === newTrip.id) {
+            isSame = true;
+            break;
+          }
+        }
+        if (!isSame) {
+          setTripList(newTrips);
+          break;
+        }
+      }
     });
   };
-
-  // const tripInFoRequest = () => {
-  //   axios.get('https://www.remembertrip.tk/mypage/trip', {
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`,
-  //       'Content-Type': 'application/json',
-  //     },
-  //     withCredentials: true,
-  //   });
-  // };
 
   const funcs = {
     loginHandler,
@@ -105,6 +119,7 @@ function Store({ children }) {
     startTrip,
     startDateHandler,
     endDateHandler,
+    updateTripList,
     getTrip,
   };
 
